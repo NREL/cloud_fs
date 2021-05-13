@@ -1,0 +1,27 @@
+package:
+    name: nrel-cloud_os
+    version: {{ environ.get('GIT_DESCRIBE_TAG','').replace('v', '', 1) }}
+
+source:
+    git_url: ../
+
+build:
+  number: 0
+  noarch: python
+  script: python setup.py install --single-version-externally-managed --record=record.txt
+
+requirements:
+  host:
+    - python
+    - pip
+    - setuptools
+  run:
+    - python
+    - pip
+
+about:
+  home: "https://github.com/NREL/cloud_os"
+  license: BSD 3-Clause
+  summary: "Cloud file system tools"
+  doc_url: "https://nrel.github.io/cloud_os"
+  dev_url: "https://github.com/NREL/cloud_os"

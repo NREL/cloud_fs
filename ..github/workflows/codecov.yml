@@ -1,0 +1,38 @@
+name: Codecov
+
+on:
+  push:
+    branches: [main, master]
+
+jobs:
+  run:
+    name: Codecov
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        auto-update-conda: true
+        python-version: 3.8
+    - name: Install conda dependencies
+      shell: bash -l {0}
+      run: |
+        conda install rtree pip pytest geopandas
+        pip install pytest-cov
+        pip install -e .
+        pip install HOPP
+    - name: Run pytest and Generate coverage report
+      shell: bash -l {0}
+      run: |
+        pytest -v --disable-warnings --cov=./ --cov-report=xml:coverage.xml
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./coverage.xml
+        flags: unittests
+        env_vars: OS,PYTHON
+        name: codecov-umbrella
+        fail_ci_if_error: false
+        verbose: true
