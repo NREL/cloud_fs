@@ -1,5 +1,5 @@
 package:
-    name: nrel-cloud_os
+    name: nrel-cloud_fs
     version: {{ environ.get('GIT_DESCRIBE_TAG','').replace('v', '', 1) }}
 
 source:
@@ -15,13 +15,15 @@ requirements:
     - python
     - pip
     - setuptools
+    - s3fs
   run:
     - python
     - pip
+    - s3fs
 
 about:
-  home: "https://github.com/NREL/cloud_os"
+  home: "https://github.com/NREL/cloud_fs"
   license: BSD 3-Clause
-  summary: "Cloud file system tools"
-  doc_url: "https://nrel.github.io/cloud_os"
-  dev_url: "https://github.com/NREL/cloud_os"
+  summary: "Cloud file system utilities"
+  doc_url: "https://nrel.github.io/cloud_fs"
+  dev_url: "https://github.com/NREL/cloud_fs"
