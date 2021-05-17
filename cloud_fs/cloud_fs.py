@@ -11,6 +11,16 @@ class FileSystem:
     Class to abstract file location and allow file-system commands that are
     """
     def __init__(self, path, anon=False, profile=None, **kwargs):
+        """
+        Parameters
+        ----------
+        path : str
+            S3 object path or file path
+        anon : bool, optional
+            Whether to use anonymous credentials, by default False
+        profile : str, optional
+            AWS credentials profile, by default None
+        """
         self._path = path
         if path.startswith('s3:'):
             self._fs = S3(path, anon=anon, profile=profile, **kwargs)
@@ -19,138 +29,151 @@ class FileSystem:
 
     def cp(self, dst, **kwargs):
         """
-        [summary]
+        Copy file to given destination
 
         Parameters
         ----------
-        src : [type]
-            [description]
-        dst : [type]
-            [description]
+        dst : str
+            Destination path
+        kwargs : dict
+            kwargs for s3fs.S3FileSystem.copy
 
         Returns
         -------
-        [type]
-            [description]
+        str
         """
         return self._fs.cp(self._path, dst, **kwargs)
 
     def exists(self):
         """
-        [summary]
+        Check if file path exists
 
         Returns
         -------
-        [type]
-            [description]
+        bool
         """
         return self._fs.exists(self._path)
 
     def isfile(self):
         """
-        [summary]
+        Check if path is a file
 
         Returns
         -------
-        [type]
-            [description]
+        bool
         """
         return self._fs.isfile(self._path)
 
     def isdir(self):
         """
-        [summary]
+        Check if path is a directory
 
         Returns
         -------
-        [type]
-            [description]
+        bool
         """
         return self._fs.isdir(self._path)
 
     def glob(self, **kwargs):
         """
-        [summary]
+        Find all file paths matching the given pattern
+
+        Parameters
+        ----------
+        kwargs : dict
+            kwargs for s3fs.S3FileSystem.glob
 
         Returns
         -------
-        [type]
-            [description]
+        list
         """
         return self._fs.glob(self._path, **kwargs)
 
     def ls(self):
         """
-        [summary]
+        List everyting under given path
 
         Returns
         -------
-        [type]
-            [description]
+        list
         """
         return self._fs.ls(self._path)
 
     def mkdirs(self, **kwargs):
         """
-        [summary]
+        Make desired directory and any intermediate directories
+
+        Parameters
+        ----------
+        kwargs : dict
+            kwargs for s3fs.S3FileSystem.mkdirs
 
         Returns
         -------
-        [type]
-            [description]
+        str
         """
         return self._fs.mkdirs(self._path, **kwargs)
 
     def mv(self, dst, **kwargs):
         """
-        [summary]
+        Move file or all files in directory to given destination
 
         Parameters
         ----------
-        dst : [type]
-            [description]
+        dst : str
+            Destination path
+        kwargs : dict
+            kwargs for s3fs.S3FileSystem.mv
 
         Returns
         -------
-        [type]
-            [description]
+        str
         """
         return self._fs.mv(self._path, dst, **kwargs)
 
-    def open(self, mode, **kwargs):
+    def open(self, mode='r', **kwargs):
         """
-        [summary]
+        Open S3 object and return a file-like object
 
         Parameters
         ----------
-        mode : [type]
-            [description]
+        mode : str
+            Mode with which to open the s3 object
+        kwargs : dict
+            kwargs for s3fs.S3FileSystem.open
 
         Returns
         -------
-        [type]
-            [description]
+        Return a file-like object from the filesystem
         """
         return self._fs.open(self._path, mode=mode, **kwargs)
 
     def rm(self, **kwargs):
         """
-        [summary]
+        Delete file or files in given directory
+
+        Parameters
+        ----------
+        kwargs : dict
+            kwargs for s3fs.S3FileSystem.rm
 
         Returns
         -------
-        [type]
-            [description]
+        str
         """
         return self._fs.rm(self._path, **kwargs)
 
     def walk(self):
         """
-        [summary]
+        Recursively search directory and all sub-directories
 
         Returns
         -------
-        [type]
-            [description]
+        path : str
+            Root path
+        directory : list
+            All directories in path
+        file : list
+            All files in path
         """
         return self._fs.walk(self._path)

@@ -7,138 +7,178 @@ import os
 import shutil
 
 
+class FauxOpen:
+    """
+    Class to mimic context handling on open as needed for cloud based files
+    """
+    # pylint: disable=unused-argument
+    def __init__(self, path, mode='r', **kwargs):
+        """
+        Parameters
+        ----------
+        path : str
+            File path
+        mode : str
+            mode placeholder
+        kwargs : dict
+            placeholder
+        """
+        self.path = path
+
+    def __enter__(self):
+        return self.path
+
+    def __exit__(self, type, value, traceback):
+        if type is not None:
+            raise
+
+
 class OS:
     """
     S3 file system utilities
     """
     def __init__(self, path):
+        """
+        Parameters
+        ----------
+        path : str
+            File path
+        """
         self._path = path
 
     def cp(self, dst, **kwargs):
         """
-        [summary]
+        Copy file to given destination
 
         Parameters
         ----------
-        src : [type]
-            [description]
-        dst : [type]
-            [description]
+        dst : str
+            Destination path
+        kwargs : dict
+            kwargs for shutil.copy
 
         Returns
         -------
-        [type]
-            [description]
+        str
         """
         return shutil.copy(self._path, dst, **kwargs)
 
     def exists(self):
         """
-        [summary]
+        Check if file path exists
 
         Returns
         -------
-        [type]
-            [description]
+        bool
         """
         return os.path.exists(self._path)
 
     def isfile(self):
         """
-        [summary]
+        Check if path is a file
 
         Returns
         -------
-        [type]
-            [description]
+        bool
         """
         return os.path.isfile(self._path)
 
     def isdir(self):
         """
-        [summary]
+        Check if path is a directory
 
         Returns
         -------
-        [type]
-            [description]
+        bool
         """
         return os.path.isdir(self._path)
 
     def glob(self, **kwargs):
         """
-        [summary]
+        Find all file paths matching the given pattern
+
+        Parameters
+        ----------
+        kwargs : dict
+            kwargs for glob.glob
 
         Returns
         -------
-        [type]
-            [description]
+        list
         """
         return glob.glob(self._path, **kwargs)
 
     def ls(self):
         """
-        [summary]
+        List everyting under given path
 
         Returns
         -------
-        [type]
-            [description]
+        list
         """
         return os.listdir(self._path)
 
-    def mkdirs(self):
+    def mkdirs(self, **kwargs):
         """
-        [summary]
+        Make desired directory and any intermediate directories
+
+        Parameters
+        ----------
+        kwargs : dict
+            kwargs for os.makedirs
 
         Returns
         -------
-        [type]
-            [description]
+        str
         """
-        return os.makedirs(self._path)
+        return os.makedirs(self._path, **kwargs)
 
     def mv(self, dst, **kwargs):
         """
-        [summary]
+        Move file or all files in directory to given destination
 
         Parameters
         ----------
-        dst : [type]
-            [description]
+        dst : str
+            Destination path
+        kwargs : dict
+            kwargs for shutil.move
 
         Returns
         -------
-        [type]
-            [description]
+        str
         """
         return shutil.move(self._path, dst, **kwargs)
 
-    # pylint: disable=unused-argument
-    def open(self, **kwargs):
+    def open(self, mode='r', **kwargs):
         """
-        [summary]
+        Faux context manager to mimic cloud open operation
 
         Parameters
         ----------
-        mode : [type]
-            [description]
+        mode : str
+            mode placeholder
+        kwargs : dict
+            placeholder
 
         Returns
         -------
-        [type]
-            [description]
+        Return a file path
         """
-        return self._path
+        return FauxOpen(self._path, mode=mode, **kwargs)
 
     def rm(self, **kwargs):
         """
-        [summary]
+        Delete file or files in given directory
+
+        Parameters
+        ----------
+        kwargs : dict
+            kwargs for shutil.rmtree
 
         Returns
         -------
-        [type]
-            [description]
+        str
         """
         if os.path.isfile(self._path):
             return os.remove(self._path)
@@ -147,11 +187,15 @@ class OS:
 
     def walk(self):
         """
-        [summary]
+        Recursively search directory and all sub-directories
 
         Returns
         -------
-        [type]
-            [description]
+        path : str
+            Root path
+        directory : list
+            All directories in path
+        file : list
+            All files in path
         """
         return os.walk(self._path)
