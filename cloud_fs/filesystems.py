@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-OS filesystem utilities
+System specific filesystem utilities
 """
 from abc import ABC
 import glob
@@ -20,7 +20,7 @@ class FauxOpen:
     Class to mimic context handling on open as needed for cloud based files
     """
     # pylint: disable=unused-argument
-    def __init__(self, path, mode='r', **kwargs):
+    def __init__(self, path, mode='rb', **kwargs):
         """
         Parameters
         ----------
@@ -96,6 +96,7 @@ class BaseFileSystem(ABC):
 
         return self._operations[operation]
 
+    @property
     def path(self):
         """
         File path to perform filesystem operation on
@@ -106,6 +107,7 @@ class BaseFileSystem(ABC):
         """
         return self._path
 
+    @property
     def operations(self):
         """
         Available filesystem operations
@@ -117,7 +119,7 @@ class BaseFileSystem(ABC):
         return sorted(self._operations)
 
 
-class OS(BaseFileSystem):
+class Local(BaseFileSystem):
     """
     Local filesystem utilities
     """
@@ -129,7 +131,7 @@ class OS(BaseFileSystem):
             File path
         """
         self._path = path
-        self._operations = {'cp': shutil.copy,
+        self._operations = {'cp': self.cp,
                             'exists': os.path.exists,
                             'isfile': os.path.isfile,
                             'isdir': os.path.isdir,
@@ -140,6 +142,23 @@ class OS(BaseFileSystem):
                             'open': FauxOpen,
                             'rm': self.rm,
                             'walk': os.walk}
+
+    @staticmethod
+    def cp(src, dst, **kwargs):
+        """
+        Copy file or recursively copy directory at src to dst
+
+        Parameters
+        ----------
+        src : path
+            File or directory to copy
+        dst : path
+            Destination to copy file or directory too
+        """
+        if os.path.isfile(src):
+            shutil.copy(src, dst, **kwargs)
+        else:
+            shutil.copytree(src, dst, **kwargs)
 
     @staticmethod
     def rm(path, **kwargs):
@@ -156,9 +175,9 @@ class OS(BaseFileSystem):
         str
         """
         if os.path.isfile(path):
-            return os.remove(path)
+            os.remove(path)
         else:
-            return shutil.rmtree(path, **kwargs)
+            shutil.rmtree(path, **kwargs)
 
 
 class S3(BaseFileSystem):

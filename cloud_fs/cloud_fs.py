@@ -2,7 +2,7 @@
 """
 Utilities to abstractly handle filesystem operations
 """
-from .filesystems import OS, S3
+from .filesystems import Local, S3
 
 
 class FileSystem:
@@ -24,7 +24,7 @@ class FileSystem:
         if path.startswith('s3:'):
             self._fs = S3(path, anon=anon, profile=profile, **kwargs)
         else:
-            self._fs = OS(path)
+            self._fs = Local(path)
 
     def __repr__(self):
         msg = ("{} operations on {}"
@@ -32,6 +32,7 @@ class FileSystem:
 
         return msg
 
+    @property
     def path(self):
         """
         File path to perform filesystem operation on
@@ -52,12 +53,8 @@ class FileSystem:
             Destination path
         kwargs : dict
             kwargs for s3fs.S3FileSystem.copy
-
-        Returns
-        -------
-        str
         """
-        return self._fs['cp'](self.path, dst, **kwargs)
+        self._fs['cp'](self.path, dst, **kwargs)
 
     def exists(self):
         """
@@ -122,12 +119,8 @@ class FileSystem:
         ----------
         kwargs : dict
             kwargs for s3fs.S3FileSystem.mkdirs
-
-        Returns
-        -------
-        str
         """
-        return self._fs['mkdirs'](self.path, **kwargs)
+        self._fs['mkdirs'](self.path, **kwargs)
 
     def mv(self, dst, **kwargs):
         """
@@ -139,14 +132,10 @@ class FileSystem:
             Destination path
         kwargs : dict
             kwargs for s3fs.S3FileSystem.mv
-
-        Returns
-        -------
-        str
         """
-        return self._fs['mv'](self.path, dst, **kwargs)
+        self._fs['mv'](self.path, dst, **kwargs)
 
-    def open(self, mode='r', **kwargs):
+    def open(self, mode='rb', **kwargs):
         """
         Open S3 object and return a file-like object
 
@@ -171,12 +160,8 @@ class FileSystem:
         ----------
         kwargs : dict
             kwargs for s3fs.S3FileSystem.rm
-
-        Returns
-        -------
-        str
         """
-        return self._fs['rm'](self.path, **kwargs)
+        self._fs['rm'](self.path, **kwargs)
 
     def walk(self):
         """
