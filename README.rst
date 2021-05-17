@@ -26,6 +26,10 @@ Welcome to the cloud file system utilities!
 .. image:: https://codecov.io/gh/nrel/cloud_fs/branch/master/graph/badge.svg?token=3J5M44VAA9
     :target: https://codecov.io/gh/nrel/cloud_fs
 
+`cloud-fs` is a generalized file-system handler that will dynamically determine
+if files are local or on the cloud (currently AWS) and perform basic
+file-systm operations.
+
 .. inclusion-intro
 
 Installing cloud_fs
@@ -61,9 +65,3 @@ Option 2: Clone repo (recommended for developers)
     5) Install ``cloud_fs`` and its dependencies by running:
        ``pip install .`` (or ``pip install -e .`` if running a dev branch
        or working on the source code)
-
-3. Check that ``cloud_fs`` was installed successfully
-    1) From any directory, run the following commands. This should return the
-       help pages for the CLI's.
-
-        - ``cloud_fs``
