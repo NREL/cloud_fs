@@ -2,8 +2,7 @@
 """
 Utilities to abstractly handle filesystem operations
 """
-from .os_fs import OS
-from .s3_fs import S3
+from .filesystems import OS, S3
 
 
 class FileSystem:
@@ -27,6 +26,22 @@ class FileSystem:
         else:
             self._fs = OS(path)
 
+    def __repr__(self):
+        msg = ("{} operations on {}"
+               .format(self.__class__.__name__, self.path))
+
+        return msg
+
+    def path(self):
+        """
+        File path to perform filesystem operation on
+
+        Returns
+        -------
+        str
+        """
+        return self._path
+
     def cp(self, dst, **kwargs):
         """
         Copy file to given destination
@@ -42,7 +57,7 @@ class FileSystem:
         -------
         str
         """
-        return self._fs.cp(self._path, dst, **kwargs)
+        return self._fs['cp'](self.path, dst, **kwargs)
 
     def exists(self):
         """
@@ -52,7 +67,7 @@ class FileSystem:
         -------
         bool
         """
-        return self._fs.exists(self._path)
+        return self._fs['exists'](self.path)
 
     def isfile(self):
         """
@@ -62,7 +77,7 @@ class FileSystem:
         -------
         bool
         """
-        return self._fs.isfile(self._path)
+        return self._fs['isfile'](self.path)
 
     def isdir(self):
         """
@@ -72,7 +87,7 @@ class FileSystem:
         -------
         bool
         """
-        return self._fs.isdir(self._path)
+        return self._fs['isdir'](self.path)
 
     def glob(self, **kwargs):
         """
@@ -87,7 +102,7 @@ class FileSystem:
         -------
         list
         """
-        return self._fs.glob(self._path, **kwargs)
+        return self._fs['glob'](self.path, **kwargs)
 
     def ls(self):
         """
@@ -97,7 +112,7 @@ class FileSystem:
         -------
         list
         """
-        return self._fs.ls(self._path)
+        return self._fs['ls'](self.path)
 
     def mkdirs(self, **kwargs):
         """
@@ -112,7 +127,7 @@ class FileSystem:
         -------
         str
         """
-        return self._fs.mkdirs(self._path, **kwargs)
+        return self._fs['mkdirs'](self.path, **kwargs)
 
     def mv(self, dst, **kwargs):
         """
@@ -129,7 +144,7 @@ class FileSystem:
         -------
         str
         """
-        return self._fs.mv(self._path, dst, **kwargs)
+        return self._fs['mv'](self.path, dst, **kwargs)
 
     def open(self, mode='r', **kwargs):
         """
@@ -146,7 +161,7 @@ class FileSystem:
         -------
         Return a file-like object from the filesystem
         """
-        return self._fs.open(self._path, mode=mode, **kwargs)
+        return self._fs['open'](self.path, mode=mode, **kwargs)
 
     def rm(self, **kwargs):
         """
@@ -161,7 +176,7 @@ class FileSystem:
         -------
         str
         """
-        return self._fs.rm(self._path, **kwargs)
+        return self._fs['rm'](self.path, **kwargs)
 
     def walk(self):
         """
@@ -176,4 +191,4 @@ class FileSystem:
         file : list
             All files in path
         """
-        return self._fs.walk(self._path)
+        return self._fs['walk'](self.path)
