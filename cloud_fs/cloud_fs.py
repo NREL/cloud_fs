@@ -163,6 +163,16 @@ class FileSystem:
         """
         self._fs['rm'](self.path, **kwargs)
 
+    def size(self):
+        """
+        Get file size in bytes
+
+        Returns
+        -------
+        float
+        """
+        self._fs['size'](self.path)
+
     def walk(self):
         """
         Recursively search directory and all sub-directories

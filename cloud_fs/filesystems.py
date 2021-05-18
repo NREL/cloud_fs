@@ -63,6 +63,7 @@ class BaseFileSystem(ABC):
                             'mv': None,
                             'open': None,
                             'rm': None,
+                            'size': None,
                             'walk': None}
 
     def __repr__(self):
@@ -141,6 +142,7 @@ class Local(BaseFileSystem):
                             'mv': shutil.move,
                             'open': FauxOpen,
                             'rm': self.rm,
+                            'size': os.path.getsize,
                             'walk': os.walk}
 
     @staticmethod
@@ -209,4 +211,5 @@ class S3(BaseFileSystem):
                             'mv': self._s3fs.mv,
                             'open': self._s3fs.open,
                             'rm': self._s3fs.rm,
+                            'size': self._s3fs.size,
                             'walk': self._s3fs.walk}
