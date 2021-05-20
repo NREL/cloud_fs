@@ -2,6 +2,7 @@
 """
 Utilities to abstractly handle filesystem operations
 """
+import inspect
 from .filesystems import Local, S3
 
 
@@ -26,6 +27,8 @@ class FileSystem:
         else:
             self._fs = Local(path)
 
+        self._check_operations()
+
     def __repr__(self):
         msg = ("{} operations on {}"
                .format(self.__class__.__name__, self.path))
@@ -42,6 +45,24 @@ class FileSystem:
         str
         """
         return self._path
+
+    def _check_operations(self):
+        """
+        Check to ensure the File System class being used has all of the
+        required file system operations defined.
+        """
+        operations = [attr for attr, attr_obj
+                      in inspect.getmembers(self.__class__)
+                      if not attr.startswith('_')
+                      and not isinstance(attr_obj, property)]
+
+        missing = list(set(operations) - set(self._fs.operations))
+        if missing:
+            msg = ("The following filesystem operations are not defined in "
+                   "{}:\n{}".format(missing, self._fs))
+            raise NotImplementedError(msg)
+
+        return operations
 
     def cp(self, dst, **kwargs):
         """
