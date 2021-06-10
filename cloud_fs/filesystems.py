@@ -40,6 +40,11 @@ class FauxOpen:
         if type is not None:
             raise
 
+    def close(self):
+        """
+        Faux close
+        """
+
 
 class BaseFileSystem(ABC):
     """

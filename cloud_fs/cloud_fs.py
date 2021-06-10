@@ -192,7 +192,7 @@ class FileSystem:
         -------
         float
         """
-        self._fs['size'](self.path)
+        return self._fs['size'](self.path)
 
     def walk(self):
         """
