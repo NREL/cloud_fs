@@ -5,4 +5,5 @@ Utilities to handle cloud filesystem operations
 from __future__ import print_function, division, absolute_import
 
 from .cloud_fs import FileSystem
+from .filesystems import FauxOpen
 from .version import __version__
