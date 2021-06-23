@@ -42,7 +42,7 @@ class PostDevelopCommand(develop):
 with open("requirements.txt") as f:
     install_requires = f.readlines()
 
-test_requires = ["pytest>=5.2", ]
+test_requires = ["pytest>=5.2", "h5py>=2.10.0,!=3.0.0"]
 description = ("`cloud-fs` is a generalized file-system handler that will "
                "dynamically determine if files are local or on the cloud "
                "(currently AWS) and perform basic file-systm operations.")
