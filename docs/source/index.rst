@@ -11,10 +11,16 @@ file-systm operations.
    :start-after: inclusion-intro
 
 .. toctree::
-  :maxdepth: 2
-  :caption: Contents:
+   :maxdepth: 3
+   :caption: Contents:
 
-  cloud-fs/cloud-fs
+   Installation
+
+.. autosummary::
+   :toctree: _cloud_fs
+   :recursive:
+
+   cloud_fs
 
 Indices and tables
 ==================
