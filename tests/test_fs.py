@@ -45,7 +45,7 @@ def test_Local_file():
         assert test == truth, "Source files don't match destination files"
 
         fs = FileSystem(os.path.join(dst, 'version.py'))
-        with fs.open() as faux:
+        with fs as faux:
             with open(faux, encoding="utf-8") as f:
                 version = f.read()
                 assert '__version__' in version
@@ -92,9 +92,8 @@ def test_S3():
     test = fs.ls()
     assert isinstance(test, list)
 
-    s3_file = 's3://nrel-pds-nsrdb/conus/nsrdb_conus_clouds_2019.h5'
-    fs = FileSystem(s3_file, anon=True)
-    with fs.open() as s3_f:
+    s3_file = 's3://nrel-pds-nsrdb/v3/nsrdb_2000.h5'
+    with FileSystem(s3_file, anon=True) as s3_f:
         with h5py.File(s3_f, mode='r') as f:
             assert 'meta' in f, 'could not search nsrdb file on S3!'
             assert 'time_index' in f, 'could not search nsrdb file on S3!'

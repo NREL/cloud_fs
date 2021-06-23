@@ -22,6 +22,7 @@ class FileSystem:
             AWS credentials profile, by default None
         """
         self._path = path
+        self._handler = None
         if path.startswith('s3:'):
             self._fs = S3(path, anon=anon, profile=profile, **kwargs)
         else:
@@ -34,6 +35,22 @@ class FileSystem:
                .format(self.__class__.__name__, self.path))
 
         return msg
+
+    def __enter__(self):
+        self._handler = self.open()
+
+        return self._handler
+
+    def __exit__(self, type, value, traceback):
+        if type is not None:
+            raise
+
+        try:
+            self._handler.close()
+        except AttributeError:
+            pass
+        except Exception:
+            raise
 
     @property
     def path(self):

@@ -15,32 +15,6 @@ class FileSystemError(Exception):
     """
 
 
-class FauxOpen:
-    """
-    Class to mimic context handling on open as needed for cloud based files
-    """
-    # pylint: disable=unused-argument
-    def __init__(self, path, mode='rb', **kwargs):
-        """
-        Parameters
-        ----------
-        path : str
-            File path
-        mode : str
-            mode placeholder
-        kwargs : dict
-            placeholder
-        """
-        self.path = path
-
-    def __enter__(self):
-        return self.path
-
-    def __exit__(self, type, value, traceback):
-        if type is not None:
-            raise
-
-
 class BaseFileSystem(ABC):
     """
     Abstract Base class for handling filesystem operations
@@ -129,7 +103,7 @@ class Local(BaseFileSystem):
         Parameters
         ----------
         path : str
-            File path
+            File or directory path
         """
         self._path = path
         self._operations = {'cp': self.cp,
@@ -140,7 +114,7 @@ class Local(BaseFileSystem):
                             'ls': os.listdir,
                             'mkdirs': os.makedirs,
                             'mv': shutil.move,
-                            'open': FauxOpen,
+                            'open': self._open,
                             'rm': self.rm,
                             'size': os.path.getsize,
                             'walk': os.walk}
@@ -162,6 +136,27 @@ class Local(BaseFileSystem):
         else:
             shutil.copytree(src, dst, **kwargs)
 
+    # pylint: disable=unused-argument
+    @staticmethod
+    def _open(path, mode='r', **kwargs):
+        """
+        Delete file or files in given directory
+
+        Parameters
+        ----------
+        path : str
+            File or directory path
+        mode : str, optional
+            mode with which to open file, by default 'r'
+        kwargs : dict
+            kwargs for shutil.rmtree
+
+        Returns
+        -------
+        str
+        """
+        return path
+
     @staticmethod
     def rm(path, **kwargs):
         """
@@ -169,6 +164,7 @@ class Local(BaseFileSystem):
 
         Parameters
         ----------
+
         kwargs : dict
             kwargs for shutil.rmtree
 
