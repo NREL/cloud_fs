@@ -23,7 +23,7 @@ class FileSystem:
         """
         self._path = path
         self._handler = None
-        if path.startswith('s3:'):
+        if path.lower().startswith('s3:'):
             self._fs = S3(path, anon=anon, profile=profile, **kwargs)
         else:
             self._fs = Local(path)
