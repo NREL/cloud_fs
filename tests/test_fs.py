@@ -93,7 +93,8 @@ def test_S3():
     assert isinstance(test, list)
 
     s3_file = 's3://nrel-pds-nsrdb/v3/nsrdb_2000.h5'
-    assert s3_file in test
+    # pylint: disable=bad-str-strip-call
+    assert s3_file.lstrip('s3://') in test
     with FileSystem(s3_file, anon=True) as s3_f:
         with h5py.File(s3_f, mode='r') as f:
             assert 'meta' in f, 'could not search nsrdb file on S3!'
