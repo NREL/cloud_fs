@@ -147,7 +147,7 @@ class FileSystem:
         -------
         list
         """
-        return self._fs['ls'](self.path)
+        return sorted(self._fs['ls'](self.path))
 
     def mkdirs(self, **kwargs):
         """
