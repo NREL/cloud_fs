@@ -38,7 +38,7 @@ def test_Local_file():
 
         fs = FileSystem(dst)
         test = fs.ls()
-        truth = os.listdir(dst)
+        truth = sorted(os.listdir(dst))
         assert test == truth, "Destination files were not listed properly"
 
         truth = ['version.py']
@@ -52,7 +52,7 @@ def test_Local_file():
 
         fs.rm()
         assert not fs.exists(), 'Remove did not work!'
-        assert not os.listdir(dst), 'Destination is not empty'
+        assert not sorted(os.listdir(dst)), 'Destination is not empty'
 
 
 def test_Local_dir():
@@ -67,15 +67,15 @@ def test_Local_dir():
         fs.cp(dst)
 
         test = fs.ls()
-        truth = os.listdir(src)
+        truth = sorted(os.listdir(src))
         assert test == truth, "Source files were not listed properly"
 
         fs = FileSystem(dst)
         test = fs.ls()
-        truth = os.listdir(dst)
+        truth = sorted(os.listdir(dst))
         assert test == truth, "Destination files were not listed properly"
 
-        truth = os.listdir(src)
+        truth = sorted(os.listdir(src))
         assert test == truth, "Source files don't match destination files"
 
         fs.rm()
@@ -86,13 +86,14 @@ def test_S3():
     """
     Test S3 utilities
     """
-    bucket = 's3://nrel-pds-nsrdb/'
+    bucket = 's3://nrel-pds-nsrdb/v3'
     fs = FileSystem(bucket, anon=True)
 
     test = fs.ls()
     assert isinstance(test, list)
 
     s3_file = 's3://nrel-pds-nsrdb/v3/nsrdb_2000.h5'
+    assert s3_file in test
     with FileSystem(s3_file, anon=True) as s3_f:
         with h5py.File(s3_f, mode='r') as f:
             assert 'meta' in f, 'could not search nsrdb file on S3!'
