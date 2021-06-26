@@ -42,14 +42,14 @@ class FileSystem:
         return self._handler
 
     def __exit__(self, type, value, traceback):
-        if type is not None:
-            raise
-
         try:
             self._handler.close()
         except AttributeError:
             pass
         except Exception:
+            raise
+
+        if type is not None:
             raise
 
     @property
