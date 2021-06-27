@@ -14,10 +14,11 @@ file-systm operations.
    :maxdepth: 3
    :caption: Contents:
 
-   Installation
+   installation
 
 .. autosummary::
    :toctree: _cloud_fs
+   :template: custom-module-template.rst
    :recursive:
 
    cloud_fs

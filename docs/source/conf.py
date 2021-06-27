@@ -59,6 +59,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx_rtd_theme",
 ]
+autosummary_generate = True
 
 intersphinx_mapping = {'python': ('http://docs.python.org/3.8', None)}
 
