@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = reVX
+SPHINXPROJ    = cloud_fs
 SOURCEDIR     = source
 BUILDDIR      = _build
 BRANCH := $(shell git rev-parse --abbrev-ref HEAD)

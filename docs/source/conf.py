@@ -133,7 +133,7 @@ html_static_path = []
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'cloud_fsdoc'
+htmlhelp_basename = 'cloud_fs_doc'
 
 
 # -- Options for LaTeX output ------------------------------------------------

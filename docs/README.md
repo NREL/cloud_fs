@@ -11,20 +11,13 @@ conda install sphinx
 conda install sphinx_rtd_theme
 
 pip install ghp-import
-pip install sphinx-click
 ```
 
 ## Refreshing the API Documentation
 
 - Make sure reV is in your PYTHONPATH
-- Remove source/reVX/reVX.rst
-- Run `sphinx-apidoc -eMT -o source/reVX ../reVX` from the `docs` folder.
-- Add the following to the top of any CLI module's .rst file:
-```
-.. click:: module_path:main
-   :prog: CLI-Alias # e.g. reVX
-   :show-nested:
-```
+- Remove source/cloud_fs/cloud_fs.rst
+- Run `sphinx-apidoc -eMT -o source/cloud_fs ../cloud_fs` from the `docs` folder.
 - `git push` changes to the documentation source code as needed.
 - Make the documentation per below
 
