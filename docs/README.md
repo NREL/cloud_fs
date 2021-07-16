@@ -12,7 +12,6 @@ conda install sphinx
 conda install sphinx_rtd_theme
 
 pip install ghp-import
-pip install sphinx-click
 ```
 
 ## Add any new CLI docs
