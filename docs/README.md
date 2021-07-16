@@ -1,6 +1,7 @@
 # Sphinx Documentation
 
-The documentation is built with [Sphinx](http://sphinx-doc.org/index.html). See their documentation for (a lot) more details.
+The documentation is built with [Sphinx](http://sphinx-doc.org/index.html).
+See their documentation for (a lot) more details.
 
 ## Installation
 
@@ -11,13 +12,18 @@ conda install sphinx
 conda install sphinx_rtd_theme
 
 pip install ghp-import
+pip install sphinx-click
 ```
 
-## Refreshing the API Documentation
+## Add any new CLI docs
 
-- Make sure reV is in your PYTHONPATH
-- Remove source/cloud_fs/cloud_fs.rst
-- Run `sphinx-apidoc -eMT -o source/cloud_fs ../cloud_fs` from the `docs` folder.
+- Create a new file .rest file in source/_cli
+- Add the following to the top of the new CLI module's .rst file:
+```
+.. click:: module_path:main
+   :prog: CLI-Alias # e.g. NSRDB
+   :show-nested:
+```
 - `git push` changes to the documentation source code as needed.
 - Make the documentation per below
 

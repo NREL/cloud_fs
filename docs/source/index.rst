@@ -1,3 +1,10 @@
+.. toctree::
+   :hidden:
+
+   Home page <self>
+   Installation and Usage <misc/installation_usage>
+   API reference <_autosummary/cloud_fs>
+
 cloud-fs documentation
 **********************
 
@@ -6,26 +13,3 @@ What is cloud-fs?
 `cloud-fs` is a generalized file-system handler that will dynamically determine
 if files are local or on the cloud (currently AWS) and perform basic
 file-systm operations.
-
-.. include:: ../../README.rst
-   :start-after: inclusion-intro
-
-.. toctree::
-   :maxdepth: 3
-   :caption: Contents:
-
-   installation
-
-.. autosummary::
-   :toctree: _cloud_fs
-   :template: custom-module-template.rst
-   :recursive:
-
-   cloud_fs
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
