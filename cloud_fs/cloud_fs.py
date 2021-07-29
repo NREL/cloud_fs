@@ -225,3 +225,31 @@ class FileSystem:
             All files in path
         """
         return self._fs['walk'](self.path)
+
+    @classmethod
+    def copy(cls, src_path, dst_path, anon=False, profile=None, **kwargs):
+        """
+        Copy file(s) from src_path to dst_path. Either can be local or in the
+        cloud.
+
+        Parameters
+        ----------
+        src_path : str
+            Source path to copy file(s) from, can be local or in the cloud
+        dst_path : str
+            Destination path to copy file(s) to, can be local or in the cloud
+        anon : bool, optional
+            Whether to use anonymous credentials, by default False
+        profile : str, optional
+            AWS credentials profile, by default None
+        """
+        s3 = (src_path.lower().startswith('s3')
+              or dst_path.lower().startswith('s3'))
+        if s3:
+            path = 's3'
+        else:
+            path = ''
+
+        fs = cls(path, anon=anon, profile=profile, **kwargs)
+
+        fs._fs['cp'](src_path, dst_path)
