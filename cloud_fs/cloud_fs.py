@@ -71,7 +71,8 @@ class FileSystem:
         operations = [attr for attr, attr_obj
                       in inspect.getmembers(self.__class__)
                       if not attr.startswith('_')
-                      and not isinstance(attr_obj, property)]
+                      and not isinstance(attr_obj, property)
+                      and not inspect.ismethod(attr_obj)]
 
         missing = list(set(operations) - set(self._fs.operations))
         if missing:
