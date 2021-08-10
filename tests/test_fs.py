@@ -38,7 +38,7 @@ def test_Local_file():
 
         fs = FileSystem(dst)
         test = fs.ls()
-        truth = sorted(os.listdir(dst))
+        truth = sorted(os.path.join(dst, file) for file in os.listdir(dst))
         assert test == truth, "Destination files were not listed properly"
 
         truth = ['version.py']
@@ -52,7 +52,9 @@ def test_Local_file():
 
         fs.rm()
         assert not fs.exists(), 'Remove did not work!'
-        assert not sorted(os.listdir(dst)), 'Destination is not empty'
+        assert not sorted(os.path.join(dst, file)
+                          for file
+                          in os.listdir(dst)), 'Destination is not empty'
 
 
 def test_Local_dir():
@@ -67,15 +69,15 @@ def test_Local_dir():
         fs.cp(dst)
 
         test = fs.ls()
-        truth = sorted(os.listdir(src))
+        truth = sorted(os.path.join(dst, file) for file in os.listdir(dst))
         assert test == truth, "Source files were not listed properly"
 
         fs = FileSystem(dst)
         test = fs.ls()
-        truth = sorted(os.listdir(dst))
+        truth = sorted(os.path.join(dst, file) for file in os.listdir(dst))
         assert test == truth, "Destination files were not listed properly"
 
-        truth = sorted(os.listdir(src))
+        truth = sorted(os.path.join(dst, file) for file in os.listdir(dst))
         assert test == truth, "Source files don't match destination files"
 
         fs.rm()

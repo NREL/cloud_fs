@@ -111,7 +111,7 @@ class Local(BaseFileSystem):
                             'isfile': os.path.isfile,
                             'isdir': os.path.isdir,
                             'glob': glob.glob,
-                            'ls': os.listdir,
+                            'ls': self.ls,
                             'mkdirs': os.makedirs,
                             'mv': shutil.move,
                             'open': self._open,
@@ -135,6 +135,23 @@ class Local(BaseFileSystem):
             shutil.copy(src, dst, **kwargs)
         else:
             shutil.copytree(src, dst, **kwargs)
+
+    @staticmethod
+    def ls(path):
+        """
+        List paths under given path
+
+        Parameters
+        ----------
+        path : str
+            path to list entries for
+
+        Returns
+        -------
+        list
+            Paths that exist under root path
+        """
+        return sorted(os.path.join(path, file) for file in os.listdir(path))
 
     # pylint: disable=unused-argument
     @staticmethod
