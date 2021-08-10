@@ -208,7 +208,7 @@ class S3(BaseFileSystem):
                             'open': self._s3fs.open,
                             'rm': self._s3fs.rm,
                             'size': self._s3fs.size,
-                            'walk': self._s3fs.walk}
+                            'walk': self.walk}
 
     def ls(self, path):
         """
@@ -224,4 +224,20 @@ class S3(BaseFileSystem):
         list
             objects that exist under path
         """
-        return sorted(os.path.basename(obj) for obj in self._s3fs.ls(path))
+        return [os.path.basename(obj) for obj in self._s3fs.ls(path)]
+
+    def walk(self, path):
+        """
+        Walk down directory structure
+
+        Parameters
+        ----------
+        path : str
+            Path to walk down
+
+        Returns
+        -------
+        list
+            root, directories, files below path
+        """
+        return [('s3://' + r, d, f) for r, d, f in self._s3fs.walk(path)]
