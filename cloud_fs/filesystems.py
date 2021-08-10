@@ -202,10 +202,26 @@ class S3(BaseFileSystem):
                             'isfile': self._s3fs.isfile,
                             'isdir': self._s3fs.isdir,
                             'glob': self._s3fs.glob,
-                            'ls': self._s3fs.ls,
+                            'ls': self.ls,
                             'mkdirs': self._s3fs.mkdirs,
                             'mv': self._s3fs.mv,
                             'open': self._s3fs.open,
                             'rm': self._s3fs.rm,
                             'size': self._s3fs.size,
                             'walk': self._s3fs.walk}
+
+    def ls(self, path):
+        """
+        List objects under path
+
+        Parameters
+        ----------
+        path : str
+            path to list objects under
+
+        Returns
+        -------
+        list
+            objects that exist under path
+        """
+        return sorted(os.path.basename(obj) for obj in self._s3fs.ls(path))
