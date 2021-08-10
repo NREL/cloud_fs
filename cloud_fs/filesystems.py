@@ -111,7 +111,7 @@ class Local(BaseFileSystem):
                             'isfile': os.path.isfile,
                             'isdir': os.path.isdir,
                             'glob': glob.glob,
-                            'ls': self.ls,
+                            'ls': os.listdir,
                             'mkdirs': os.makedirs,
                             'mv': shutil.move,
                             'open': self._open,
@@ -135,23 +135,6 @@ class Local(BaseFileSystem):
             shutil.copy(src, dst, **kwargs)
         else:
             shutil.copytree(src, dst, **kwargs)
-
-    @staticmethod
-    def ls(path):
-        """
-        List paths under given path
-
-        Parameters
-        ----------
-        path : str
-            path to list entries for
-
-        Returns
-        -------
-        list
-            Paths that exist under root path
-        """
-        return sorted(os.path.join(path, file) for file in os.listdir(path))
 
     # pylint: disable=unused-argument
     @staticmethod
@@ -219,10 +202,26 @@ class S3(BaseFileSystem):
                             'isfile': self._s3fs.isfile,
                             'isdir': self._s3fs.isdir,
                             'glob': self._s3fs.glob,
-                            'ls': self._s3fs.ls,
+                            'ls': self.ls,
                             'mkdirs': self._s3fs.mkdirs,
                             'mv': self._s3fs.mv,
                             'open': self._s3fs.open,
                             'rm': self._s3fs.rm,
                             'size': self._s3fs.size,
                             'walk': self._s3fs.walk}
+
+    def ls(self, path):
+        """
+        List objects under path
+
+        Parameters
+        ----------
+        path : str
+            path to list objects under
+
+        Returns
+        -------
+        list
+            objects that exist under path
+        """
+        return sorted(os.path.basename(obj) for obj in self._s3fs.ls(path))
