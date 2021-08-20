@@ -244,10 +244,10 @@ class FileSystem:
         profile : str, optional
             AWS credentials profile, by default None
         """
-        s3 = (src_path.lower().startswith('s3')
-              or dst_path.lower().startswith('s3'))
+        s3 = (src_path.lower().startswith('s3:')
+              or dst_path.lower().startswith('s3:'))
         if s3:
-            path = 's3'
+            path = 's3:'
         else:
             path = ''
 
