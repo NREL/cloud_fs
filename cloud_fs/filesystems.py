@@ -197,7 +197,7 @@ class S3(BaseFileSystem):
         self._s3fs = s3fs.S3FileSystem(anon=anon, profile=profile,
                                        **kwargs)
 
-        self._operations = {'cp': self._s3fs.copy,
+        self._operations = {'cp': self.copy,
                             'exists': self._s3fs.exists,
                             'isfile': self._s3fs.isfile,
                             'isdir': self._s3fs.isdir,
@@ -209,6 +209,31 @@ class S3(BaseFileSystem):
                             'rm': self._s3fs.rm,
                             'size': self._s3fs.size,
                             'walk': self.walk}
+
+    def copy(self, src, dst, **kwargs):
+        """
+        Copy file within, to and from s3
+
+        Parameters
+        ----------
+        src : str
+            Source path
+        dst : str
+            Destination path
+        """
+        s3_src = src.lower().startswith('s3:')
+        s3_dst = dst.lower().startswith('s3:')
+
+        if s3_src and s3_dst:
+            self._s3fs.copy(src, dst, **kwargs)
+        elif s3_src:
+            self._s3fs.get(src, dst, **kwargs)
+        elif s3_dst:
+            self._s3fs.put(src, dst, **kwargs)
+        else:
+            msg = ("Source ({}) or destination ({}) path must be on s3!"
+                   .format(src, dst))
+            raise ValueError(msg)
 
     def ls(self, path):
         """
