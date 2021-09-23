@@ -196,6 +196,7 @@ class S3(BaseFileSystem):
         self._path = s3_path
         self._s3fs = s3fs.S3FileSystem(anon=anon, profile=profile,
                                        **kwargs)
+        self._s3fs.invalidate_cache()
 
         self._operations = {'cp': self.copy,
                             'exists': self._s3fs.exists,
