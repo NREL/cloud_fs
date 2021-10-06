@@ -202,7 +202,7 @@ class S3(BaseFileSystem):
                             'exists': self._s3fs.exists,
                             'isfile': self._s3fs.isfile,
                             'isdir': self._s3fs.isdir,
-                            'glob': self._s3fs.glob,
+                            'glob': self.glob,
                             'ls': self.ls,
                             'mkdirs': self._s3fs.mkdirs,
                             'mv': self._s3fs.mv,
@@ -235,6 +235,22 @@ class S3(BaseFileSystem):
             msg = ("Source ({}) or destination ({}) path must be on s3!"
                    .format(src, dst))
             raise ValueError(msg)
+
+    def glob(self, path):
+        """
+        List objects under path that match pattern in path
+
+        Parameters
+        ----------
+        path : str
+            path to list objects under
+
+        Returns
+        -------
+        list
+            objects that exist under path
+        """
+        return ["s3://" + p for p in self._s3fs.glob(path)]
 
     def ls(self, path):
         """
