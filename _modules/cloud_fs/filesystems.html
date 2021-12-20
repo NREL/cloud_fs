@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cloud_fs.filesystems &mdash; cloud_fs v0.0.8 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> cloud_fs
+          </a>
+              <div class="version">
+                v0.0.8
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Home page</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../misc/installation_usage.html">Installation and Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../misc/installation.html">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../misc/installation.html#option-1-install-from-pip-or-conda-recommended-for-analysts">Option 1: Install from PIP or Conda (recommended for analysts):</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../misc/installation.html#option-2-clone-repo-recommended-for-developers">Option 2: Clone repo (recommended for developers)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../_autosummary/cloud_fs.html">API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../_autosummary/cloud_fs.cloud_fs.html">cloud_fs.cloud_fs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/cloud_fs.cloud_fs.FileSystem.html">cloud_fs.cloud_fs.FileSystem</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../_autosummary/cloud_fs.filesystems.html">cloud_fs.filesystems</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/cloud_fs.filesystems.BaseFileSystem.html">cloud_fs.filesystems.BaseFileSystem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/cloud_fs.filesystems.Local.html">cloud_fs.filesystems.Local</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/cloud_fs.filesystems.S3.html">cloud_fs.filesystems.S3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../_autosummary/cloud_fs.filesystems.FileSystemError.html">cloud_fs.filesystems.FileSystemError</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../_autosummary/cloud_fs.version.html">cloud_fs.version</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">cloud_fs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>cloud_fs.filesystems</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cloud_fs.filesystems</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">System specific filesystem utilities</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">s3fs</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+
+<div class="viewcode-block" id="FileSystemError"><a class="viewcode-back" href="../../_autosummary/cloud_fs.filesystems.FileSystemError.html#cloud_fs.filesystems.FileSystemError">[docs]</a><span class="k">class</span> <span class="nc">FileSystemError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Custom filesystem error</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="BaseFileSystem"><a class="viewcode-back" href="../../_autosummary/cloud_fs.filesystems.BaseFileSystem.html#cloud_fs.filesystems.BaseFileSystem">[docs]</a><span class="k">class</span> <span class="nc">BaseFileSystem</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract Base class for handling filesystem operations</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : str</span>
+<span class="sd">            File path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_operations</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cp&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="s1">&#39;exists&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="s1">&#39;isfile&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="s1">&#39;isdir&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="s1">&#39;glob&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="s1">&#39;ls&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="s1">&#39;mkdirs&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="s1">&#39;mv&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="s1">&#39;open&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="s1">&#39;rm&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="s1">&#39;walk&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> filesystem operations on </span><span class="si">{}</span><span class="s2">&quot;</span>
+               <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">msg</span>
+
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">operations</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operation</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get filesystem specific operation function/method</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        operation : str</span>
+<span class="sd">            Filesystem operation name</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        obj</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">operation</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a valid </span><span class="si">{}</span><span class="s1"> filesystem operation! Please select &#39;</span>
+                   <span class="s1">&#39;one of:</span><span class="se">\n</span><span class="si">{}</span><span class="s1">&#39;</span>
+                   <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">operation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+                           <span class="bp">self</span><span class="o">.</span><span class="n">operations</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">FileSystemError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_operations</span><span class="p">[</span><span class="n">operation</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        File path to perform filesystem operation on</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">operations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Available filesystem operations</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_operations</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Local"><a class="viewcode-back" href="../../_autosummary/cloud_fs.filesystems.Local.html#cloud_fs.filesystems.Local">[docs]</a><span class="k">class</span> <span class="nc">Local</span><span class="p">(</span><span class="n">BaseFileSystem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Local filesystem utilities</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : str</span>
+<span class="sd">            File or directory path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_operations</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cp&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cp</span><span class="p">,</span>
+                            <span class="s1">&#39;exists&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">,</span>
+                            <span class="s1">&#39;isfile&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">,</span>
+                            <span class="s1">&#39;isdir&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">,</span>
+                            <span class="s1">&#39;glob&#39;</span><span class="p">:</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">,</span>
+                            <span class="s1">&#39;ls&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">,</span>
+                            <span class="s1">&#39;mkdirs&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">,</span>
+                            <span class="s1">&#39;mv&#39;</span><span class="p">:</span> <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">,</span>
+                            <span class="s1">&#39;open&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_open</span><span class="p">,</span>
+                            <span class="s1">&#39;rm&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm</span><span class="p">,</span>
+                            <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">,</span>
+                            <span class="s1">&#39;walk&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">}</span>
+
+<div class="viewcode-block" id="Local.cp"><a class="viewcode-back" href="../../_autosummary/cloud_fs.filesystems.Local.html#cloud_fs.filesystems.Local.cp">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cp</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Copy file or recursively copy directory at src to dst</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        src : path</span>
+<span class="sd">            File or directory to copy</span>
+<span class="sd">        dst : path</span>
+<span class="sd">            Destination to copy file or directory too</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">src</span><span class="p">):</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="c1"># pylint: disable=unused-argument</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete file or files in given directory</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : str</span>
+<span class="sd">            File or directory path</span>
+<span class="sd">        mode : str, optional</span>
+<span class="sd">            mode with which to open file, by default &#39;r&#39;</span>
+<span class="sd">        kwargs : dict</span>
+<span class="sd">            kwargs for shutil.rmtree</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">path</span>
+
+<div class="viewcode-block" id="Local.rm"><a class="viewcode-back" href="../../_autosummary/cloud_fs.filesystems.Local.html#cloud_fs.filesystems.Local.rm">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">rm</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete file or files in given directory</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        kwargs : dict</span>
+<span class="sd">            kwargs for shutil.rmtree</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="S3"><a class="viewcode-back" href="../../_autosummary/cloud_fs.filesystems.S3.html#cloud_fs.filesystems.S3">[docs]</a><span class="k">class</span> <span class="nc">S3</span><span class="p">(</span><span class="n">BaseFileSystem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    S3 filesystem utilities</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s3_path</span><span class="p">,</span> <span class="n">anon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        s3_path : str</span>
+<span class="sd">            S3 object path</span>
+<span class="sd">        anon : bool, optional</span>
+<span class="sd">            Whether to use anonymous credentials, by default False</span>
+<span class="sd">        profile : str, optional</span>
+<span class="sd">            AWS credentials profile, by default None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">s3_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_s3fs</span> <span class="o">=</span> <span class="n">s3fs</span><span class="o">.</span><span class="n">S3FileSystem</span><span class="p">(</span><span class="n">anon</span><span class="o">=</span><span class="n">anon</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="n">profile</span><span class="p">,</span>
+                                       <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_s3fs</span><span class="o">.</span><span class="n">invalidate_cache</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_operations</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cp&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">,</span>
+                            <span class="s1">&#39;exists&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s3fs</span><span class="o">.</span><span class="n">exists</span><span class="p">,</span>
+                            <span class="s1">&#39;isfile&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s3fs</span><span class="o">.</span><span class="n">isfile</span><span class="p">,</span>
+                            <span class="s1">&#39;isdir&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s3fs</span><span class="o">.</span><span class="n">isdir</span><span class="p">,</span>
+                            <span class="s1">&#39;glob&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">glob</span><span class="p">,</span>
+                            <span class="s1">&#39;ls&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ls</span><span class="p">,</span>
+                            <span class="s1">&#39;mkdirs&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s3fs</span><span class="o">.</span><span class="n">mkdirs</span><span class="p">,</span>
+                            <span class="s1">&#39;mv&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s3fs</span><span class="o">.</span><span class="n">mv</span><span class="p">,</span>
+                            <span class="s1">&#39;open&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s3fs</span><span class="o">.</span><span class="n">open</span><span class="p">,</span>
+                            <span class="s1">&#39;rm&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s3fs</span><span class="o">.</span><span class="n">rm</span><span class="p">,</span>
+                            <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s3fs</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+                            <span class="s1">&#39;walk&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">walk</span><span class="p">}</span>
+
+<div class="viewcode-block" id="S3.copy"><a class="viewcode-back" href="../../_autosummary/cloud_fs.filesystems.S3.html#cloud_fs.filesystems.S3.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Copy file within, to and from s3</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        src : str</span>
+<span class="sd">            Source path</span>
+<span class="sd">        dst : str</span>
+<span class="sd">            Destination path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s3_src</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;s3:&#39;</span><span class="p">)</span>
+        <span class="n">s3_dst</span> <span class="o">=</span> <span class="n">dst</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;s3:&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">s3_src</span> <span class="ow">and</span> <span class="n">s3_dst</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_s3fs</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">s3_src</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_s3fs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">s3_dst</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_s3fs</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Source (</span><span class="si">{}</span><span class="s2">) or destination (</span><span class="si">{}</span><span class="s2">) path must be on s3!&quot;</span>
+                   <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="S3.glob"><a class="viewcode-back" href="../../_autosummary/cloud_fs.filesystems.S3.html#cloud_fs.filesystems.S3.glob">[docs]</a>    <span class="k">def</span> <span class="nf">glob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        List objects under path that match pattern in path</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : str</span>
+<span class="sd">            path to list objects under</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            objects that exist under path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;s3://&quot;</span> <span class="o">+</span> <span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s3fs</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="S3.ls"><a class="viewcode-back" href="../../_autosummary/cloud_fs.filesystems.S3.html#cloud_fs.filesystems.S3.ls">[docs]</a>    <span class="k">def</span> <span class="nf">ls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        List objects under path</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : str</span>
+<span class="sd">            path to list objects under</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            objects that exist under path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s3fs</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">path</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="S3.walk"><a class="viewcode-back" href="../../_autosummary/cloud_fs.filesystems.S3.html#cloud_fs.filesystems.S3.walk">[docs]</a>    <span class="k">def</span> <span class="nf">walk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Walk down directory structure</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : str</span>
+<span class="sd">            Path to walk down</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            root, directories, files below path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;s3://&#39;</span> <span class="o">+</span> <span class="n">r</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s3fs</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">path</span><span class="p">)]</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Alliance for Sustainable Energy, LLC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

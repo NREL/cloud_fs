@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cloud_fs.cloud_fs.FileSystem &mdash; cloud_fs v0.0.8 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="cloud_fs.filesystems" href="cloud_fs.filesystems.html" />
+    <link rel="prev" title="cloud_fs.cloud_fs" href="cloud_fs.cloud_fs.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> cloud_fs
+          </a>
+              <div class="version">
+                v0.0.8
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Home page</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/installation_usage.html">Installation and Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../misc/installation.html">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../misc/installation.html#option-1-install-from-pip-or-conda-recommended-for-analysts">Option 1: Install from PIP or Conda (recommended for analysts):</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../misc/installation.html#option-2-clone-repo-recommended-for-developers">Option 2: Clone repo (recommended for developers)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="cloud_fs.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="cloud_fs.cloud_fs.html">cloud_fs.cloud_fs</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">cloud_fs.cloud_fs.FileSystem</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cloud_fs.filesystems.html">cloud_fs.filesystems</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cloud_fs.filesystems.BaseFileSystem.html">cloud_fs.filesystems.BaseFileSystem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cloud_fs.filesystems.Local.html">cloud_fs.filesystems.Local</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cloud_fs.filesystems.S3.html">cloud_fs.filesystems.S3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cloud_fs.filesystems.FileSystemError.html">cloud_fs.filesystems.FileSystemError</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cloud_fs.version.html">cloud_fs.version</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cloud_fs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="cloud_fs.html">cloud_fs</a> &raquo;</li>
+          <li><a href="cloud_fs.cloud_fs.html">cloud_fs.cloud_fs</a> &raquo;</li>
+      <li>cloud_fs.cloud_fs.FileSystem</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/nrel/cloud_fs/blob/main/docs/source/_autosummary/cloud_fs.cloud_fs.FileSystem.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cloud-fs-cloud-fs-filesystem">
+<h1>cloud_fs.cloud_fs.FileSystem<a class="headerlink" href="#cloud-fs-cloud-fs-filesystem" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="cloud_fs.cloud_fs.FileSystem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FileSystem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cloud_fs/cloud_fs.html#FileSystem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cloud_fs.cloud_fs.FileSystem" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Class to abstract file location and allow file-system commands that are</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – S3 object path or file path</p></li>
+<li><p><strong>anon</strong> (<em>bool, optional</em>) – Whether to use anonymous credentials, by default False</p></li>
+<li><p><strong>profile</strong> (<em>str, optional</em>) – AWS credentials profile, by default None</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cloud_fs.cloud_fs.FileSystem.copy" title="cloud_fs.cloud_fs.FileSystem.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a></p></td>
+<td><p>Copy file(s) from src_path to dst_path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cloud_fs.cloud_fs.FileSystem.cp" title="cloud_fs.cloud_fs.FileSystem.cp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cp</span></code></a></p></td>
+<td><p>Copy file to given destination</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cloud_fs.cloud_fs.FileSystem.exists" title="cloud_fs.cloud_fs.FileSystem.exists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exists</span></code></a></p></td>
+<td><p>Check if file path exists</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cloud_fs.cloud_fs.FileSystem.glob" title="cloud_fs.cloud_fs.FileSystem.glob"><code class="xref py py-obj docutils literal notranslate"><span class="pre">glob</span></code></a></p></td>
+<td><p>Find all file paths matching the given pattern</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cloud_fs.cloud_fs.FileSystem.isdir" title="cloud_fs.cloud_fs.FileSystem.isdir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isdir</span></code></a></p></td>
+<td><p>Check if path is a directory</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cloud_fs.cloud_fs.FileSystem.isfile" title="cloud_fs.cloud_fs.FileSystem.isfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isfile</span></code></a></p></td>
+<td><p>Check if path is a file</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cloud_fs.cloud_fs.FileSystem.ls" title="cloud_fs.cloud_fs.FileSystem.ls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ls</span></code></a></p></td>
+<td><p>List everyting under given path</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cloud_fs.cloud_fs.FileSystem.mkdirs" title="cloud_fs.cloud_fs.FileSystem.mkdirs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mkdirs</span></code></a></p></td>
+<td><p>Make desired directory and any intermediate directories</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cloud_fs.cloud_fs.FileSystem.mv" title="cloud_fs.cloud_fs.FileSystem.mv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mv</span></code></a></p></td>
+<td><p>Move file or all files in directory to given destination</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cloud_fs.cloud_fs.FileSystem.open" title="cloud_fs.cloud_fs.FileSystem.open"><code class="xref py py-obj docutils literal notranslate"><span class="pre">open</span></code></a></p></td>
+<td><p>Open S3 object and return a file-like object</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cloud_fs.cloud_fs.FileSystem.rm" title="cloud_fs.cloud_fs.FileSystem.rm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rm</span></code></a></p></td>
+<td><p>Delete file or files in given directory</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#cloud_fs.cloud_fs.FileSystem.size" title="cloud_fs.cloud_fs.FileSystem.size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">size</span></code></a></p></td>
+<td><p>Get file size in bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cloud_fs.cloud_fs.FileSystem.walk" title="cloud_fs.cloud_fs.FileSystem.walk"><code class="xref py py-obj docutils literal notranslate"><span class="pre">walk</span></code></a></p></td>
+<td><p>Recursively search directory and all sub-directories</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#cloud_fs.cloud_fs.FileSystem.path" title="cloud_fs.cloud_fs.FileSystem.path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></a></p></td>
+<td><p>File path to perform filesystem operation on</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="cloud_fs.cloud_fs.FileSystem.path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#cloud_fs.cloud_fs.FileSystem.path" title="Permalink to this definition"></a></dt>
+<dd><p>File path to perform filesystem operation on</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>str</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cloud_fs.cloud_fs.FileSystem.cp">
+<span class="sig-name descname"><span class="pre">cp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dst</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cloud_fs/cloud_fs.html#FileSystem.cp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cloud_fs.cloud_fs.FileSystem.cp" title="Permalink to this definition"></a></dt>
+<dd><p>Copy file to given destination</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dst</strong> (<em>str</em>) – Destination path</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – kwargs for s3fs.S3FileSystem.copy</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cloud_fs.cloud_fs.FileSystem.exists">
+<span class="sig-name descname"><span class="pre">exists</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cloud_fs/cloud_fs.html#FileSystem.exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cloud_fs.cloud_fs.FileSystem.exists" title="Permalink to this definition"></a></dt>
+<dd><p>Check if file path exists</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>bool</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cloud_fs.cloud_fs.FileSystem.isfile">
+<span class="sig-name descname"><span class="pre">isfile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cloud_fs/cloud_fs.html#FileSystem.isfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cloud_fs.cloud_fs.FileSystem.isfile" title="Permalink to this definition"></a></dt>
+<dd><p>Check if path is a file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>bool</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cloud_fs.cloud_fs.FileSystem.isdir">
+<span class="sig-name descname"><span class="pre">isdir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cloud_fs/cloud_fs.html#FileSystem.isdir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cloud_fs.cloud_fs.FileSystem.isdir" title="Permalink to this definition"></a></dt>
+<dd><p>Check if path is a directory</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>bool</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cloud_fs.cloud_fs.FileSystem.glob">
+<span class="sig-name descname"><span class="pre">glob</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cloud_fs/cloud_fs.html#FileSystem.glob"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cloud_fs.cloud_fs.FileSystem.glob" title="Permalink to this definition"></a></dt>
+<dd><p>Find all file paths matching the given pattern</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – kwargs for s3fs.S3FileSystem.glob</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>list</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cloud_fs.cloud_fs.FileSystem.ls">
+<span class="sig-name descname"><span class="pre">ls</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cloud_fs/cloud_fs.html#FileSystem.ls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cloud_fs.cloud_fs.FileSystem.ls" title="Permalink to this definition"></a></dt>
+<dd><p>List everyting under given path</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>list</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cloud_fs.cloud_fs.FileSystem.mkdirs">
+<span class="sig-name descname"><span class="pre">mkdirs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cloud_fs/cloud_fs.html#FileSystem.mkdirs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cloud_fs.cloud_fs.FileSystem.mkdirs" title="Permalink to this definition"></a></dt>
+<dd><p>Make desired directory and any intermediate directories</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – kwargs for s3fs.S3FileSystem.mkdirs</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cloud_fs.cloud_fs.FileSystem.mv">
+<span class="sig-name descname"><span class="pre">mv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dst</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cloud_fs/cloud_fs.html#FileSystem.mv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cloud_fs.cloud_fs.FileSystem.mv" title="Permalink to this definition"></a></dt>
+<dd><p>Move file or all files in directory to given destination</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dst</strong> (<em>str</em>) – Destination path</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – kwargs for s3fs.S3FileSystem.mv</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cloud_fs.cloud_fs.FileSystem.open">
+<span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rb'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cloud_fs/cloud_fs.html#FileSystem.open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cloud_fs.cloud_fs.FileSystem.open" title="Permalink to this definition"></a></dt>
+<dd><p>Open S3 object and return a file-like object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mode</strong> (<em>str</em>) – Mode with which to open the s3 object</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – kwargs for s3fs.S3FileSystem.open</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>Return a file-like object from the filesystem</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cloud_fs.cloud_fs.FileSystem.rm">
+<span class="sig-name descname"><span class="pre">rm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cloud_fs/cloud_fs.html#FileSystem.rm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cloud_fs.cloud_fs.FileSystem.rm" title="Permalink to this definition"></a></dt>
+<dd><p>Delete file or files in given directory</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – kwargs for s3fs.S3FileSystem.rm</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cloud_fs.cloud_fs.FileSystem.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cloud_fs/cloud_fs.html#FileSystem.size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cloud_fs.cloud_fs.FileSystem.size" title="Permalink to this definition"></a></dt>
+<dd><p>Get file size in bytes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>float</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cloud_fs.cloud_fs.FileSystem.walk">
+<span class="sig-name descname"><span class="pre">walk</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cloud_fs/cloud_fs.html#FileSystem.walk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cloud_fs.cloud_fs.FileSystem.walk" title="Permalink to this definition"></a></dt>
+<dd><p>Recursively search directory and all sub-directories</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Root path</p></li>
+<li><p><strong>directory</strong> (<em>list</em>) – All directories in path</p></li>
+<li><p><strong>file</strong> (<em>list</em>) – All files in path</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cloud_fs.cloud_fs.FileSystem.copy">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cloud_fs/cloud_fs.html#FileSystem.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cloud_fs.cloud_fs.FileSystem.copy" title="Permalink to this definition"></a></dt>
+<dd><p>Copy file(s) from src_path to dst_path. Either can be local or in the
+cloud.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src_path</strong> (<em>str</em>) – Source path to copy file(s) from, can be local or in the cloud</p></li>
+<li><p><strong>dst_path</strong> (<em>str</em>) – Destination path to copy file(s) to, can be local or in the cloud</p></li>
+<li><p><strong>anon</strong> (<em>bool, optional</em>) – Whether to use anonymous credentials, by default False</p></li>
+<li><p><strong>profile</strong> (<em>str, optional</em>) – AWS credentials profile, by default None</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cloud_fs.cloud_fs.html" class="btn btn-neutral float-left" title="cloud_fs.cloud_fs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cloud_fs.filesystems.html" class="btn btn-neutral float-right" title="cloud_fs.filesystems" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Alliance for Sustainable Energy, LLC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

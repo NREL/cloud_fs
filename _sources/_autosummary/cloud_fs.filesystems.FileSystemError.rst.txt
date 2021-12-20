@@ -1,0 +1,6 @@
+cloud\_fs.filesystems.FileSystemError
+=====================================
+
+.. currentmodule:: cloud_fs.filesystems
+
+.. autoexception:: FileSystemError

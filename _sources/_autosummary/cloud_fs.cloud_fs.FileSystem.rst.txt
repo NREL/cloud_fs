@@ -1,0 +1,43 @@
+cloud\_fs.cloud\_fs.FileSystem
+==============================
+
+.. currentmodule:: cloud_fs.cloud_fs
+
+.. autoclass:: FileSystem
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~FileSystem.copy
+      ~FileSystem.cp
+      ~FileSystem.exists
+      ~FileSystem.glob
+      ~FileSystem.isdir
+      ~FileSystem.isfile
+      ~FileSystem.ls
+      ~FileSystem.mkdirs
+      ~FileSystem.mv
+      ~FileSystem.open
+      ~FileSystem.rm
+      ~FileSystem.size
+      ~FileSystem.walk
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~FileSystem.path
+   
+   

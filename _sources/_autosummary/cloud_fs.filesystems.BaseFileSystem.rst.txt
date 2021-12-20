@@ -1,0 +1,31 @@
+cloud\_fs.filesystems.BaseFileSystem
+====================================
+
+.. currentmodule:: cloud_fs.filesystems
+
+.. autoclass:: BaseFileSystem
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BaseFileSystem.operations
+      ~BaseFileSystem.path
+   
+   

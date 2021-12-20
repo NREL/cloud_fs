@@ -1,0 +1,32 @@
+cloud\_fs.cloud\_fs
+===================
+
+.. automodule:: cloud_fs.cloud_fs
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      FileSystem
+   
+   
+
+   
+   
+   
+
+
+

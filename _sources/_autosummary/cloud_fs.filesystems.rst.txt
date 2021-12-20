@@ -1,0 +1,42 @@
+cloud\_fs.filesystems
+=====================
+
+.. automodule:: cloud_fs.filesystems
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+      :nosignatures:
+   
+      BaseFileSystem
+      Local
+      S3
+   
+   
+
+   
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+      :toctree:
+      :nosignatures:
+   
+      FileSystemError
+   
+   
+
+
+

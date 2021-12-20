@@ -1,0 +1,33 @@
+cloud\_fs.filesystems.Local
+===========================
+
+.. currentmodule:: cloud_fs.filesystems
+
+.. autoclass:: Local
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~Local.cp
+      ~Local.rm
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Local.operations
+      ~Local.path
+   
+   

@@ -1,0 +1,35 @@
+cloud\_fs.filesystems.S3
+========================
+
+.. currentmodule:: cloud_fs.filesystems
+
+.. autoclass:: S3
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :special-members: __call__, __add__, __mul__
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+   
+      ~S3.copy
+      ~S3.glob
+      ~S3.ls
+      ~S3.walk
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~S3.operations
+      ~S3.path
+   
+   

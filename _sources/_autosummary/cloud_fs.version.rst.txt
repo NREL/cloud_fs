@@ -1,0 +1,23 @@
+cloud\_fs.version
+=================
+
+.. automodule:: cloud_fs.version
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

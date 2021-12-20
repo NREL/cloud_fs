@@ -1,0 +1,33 @@
+﻿cloud\_fs
+=========
+
+.. automodule:: cloud_fs
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :nosignatures:
+   :recursive:
+
+   cloud_fs.cloud_fs
+   cloud_fs.filesystems
+   cloud_fs.version
+
